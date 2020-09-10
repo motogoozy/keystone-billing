@@ -1,0 +1,123 @@
+.App {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  .header {
+    width: 100%;
+    height: 3rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgb(54, 54, 54);
+
+    p {
+      margin: 0 1rem 0 0;
+      color: white;
+
+      &:hover {
+        color: #09bbbb;
+        cursor: pointer;
+      }
+    }
+
+    .active-header-tab {
+      color: #09bbbb;
+
+      &:hover {
+        cursor: default;
+      }
+    }
+  }
+
+  .main-content {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .file-upload-container {
+      height: 100%;
+      flex: 1;
+      min-width: 20rem;
+      max-width: 25rem;
+      border-right: 1px solid gray;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+
+      div {
+        font-weight: bold;
+      }
+
+      .file-upload {
+        width: 100%;
+        padding: 1rem;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        .file-upload-header {
+          height: 2rem;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+        }
+      }
+    }
+
+    .results-container {
+      height: 100%;
+      flex: 2.5;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1rem;
+
+      .results-container-header {
+        height: 2rem;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        div {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .number-circle {
+      height: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      min-width: 1.5rem;
+      margin-right: 0.75rem;
+      border-radius: 50%;
+      border: 2px solid black;
+      color: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+  }
+}
