@@ -65,8 +65,8 @@ function App() {
     return billingDiscrepancies.map((client, index) => {
       return (
         <div className='results-row' key={index}>
-          <p>{client['consumer_name']}</p>
-          <p>{client['consumer_pid']}</p>
+          <p>{client.consumer_name}</p>
+          <p>{client.consumer_pid}</p>
           <p>{client.service_start_date}</p>
           <p>{client.service_end_date}</p>
           <p>{client.sce}</p>
@@ -81,7 +81,7 @@ function App() {
 
       return (
         <div className='results-row' key={index}>
-          <p>{client.Consumer}</p>
+          <p>{client['Consumer']}</p>
           <p>{client['PID']}</p>
           <p>{client['Start Date']}</p>
           <p>{client['End Date']}</p>
@@ -151,13 +151,13 @@ function App() {
             {billingDiscrepancies && paymentDiscrepancies && (
               <>
                 <div className='results-section'>
-                  {billingDiscrepancies.length > 1 ? (
-                    <>
-                      <div className='results-section-header'>
-                        <p className='discrepancy-type'>Billing Discrepancies</p>
-                        <p className='discrepancy-type-description'>Billed for but no payment received</p>
-                      </div>
-                      <div className='results'>
+                  <div className='results-section-header'>
+                    <p className='discrepancy-type'>Billing Discrepancies</p>
+                    <p className='discrepancy-type-description'>Billed for but no payment received</p>
+                  </div>
+                  <div className='results'>
+                    {billingDiscrepancies.length > 1 ? (
+                      <>
                         <div className='results-header'>
                           <p>Client Name</p>
                           <p>PID</p>
@@ -166,26 +166,26 @@ function App() {
                           <p>Support Coordinator</p>
                         </div>
                         <div className='results-row-container'>{displayBillingDiscrepancies()}</div>
+                      </>
+                    ) : (
+                      <div className='no-discrepancies-container'>
+                        <i className='far fa-check-square'></i>
+                        <p>All good! No discrepancies.</p>
                       </div>
-                    </>
-                  ) : (
-                    <div className='no-discrepancies-container'>
-                      <i className='far fa-check-square'></i>
-                      <p>All good! No discrepancies.</p>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
 
                 <span className='section-divider'></span>
 
                 <div className='results-section'>
-                  {paymentDiscrepancies.length > 1 ? (
-                    <>
-                      <div className='results-section-header'>
-                        <p className='discrepancy-type'>Payment Discrepancies</p>
-                        <p className='discrepancy-type-description'>Payment received but not billed for</p>
-                      </div>
-                      <div className='results'>
+                  <div className='results-section-header'>
+                    <p className='discrepancy-type'>Payment Discrepancies</p>
+                    <p className='discrepancy-type-description'>Payment received but not billed for</p>
+                  </div>
+                  <div className='results'>
+                    {paymentDiscrepancies.length > 1 ? (
+                      <>
                         <div className='results-header'>
                           <p>Client Name</p>
                           <p>PID</p>
@@ -194,14 +194,14 @@ function App() {
                           <p>Support Coordinator</p>
                         </div>
                         <div className='results-row-container'>{displayPaymentDiscrepancies()}</div>
+                      </>
+                    ) : (
+                      <div className='no-discrepancies-container'>
+                        <i className='far fa-check-square'></i>
+                        <p>All good! No discrepancies.</p>
                       </div>
-                    </>
-                  ) : (
-                    <div className='no-discrepancies-container'>
-                      <i className='far fa-check-square'></i>
-                      <p>All good! No discrepancies.</p>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </>
             )}
