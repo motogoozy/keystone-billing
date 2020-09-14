@@ -7,8 +7,8 @@ import { CSVLink } from 'react-csv';
 function App() {
   const [billingData, setBillingData] = useState(null);
   const [paymentData, setPaymentData] = useState(null);
-  const [billingDiscrepancies, setBillingDiscrepancies] = useState(null);
-  const [paymentDiscrepancies, setPaymentDiscrepancies] = useState(null);
+  const [missingPayments, setMissingPayments] = useState(null);
+  const [missingBillings, setMissingBillings] = useState(null);
 
   const getDiscrepancies = () => {
     try {
@@ -34,7 +34,7 @@ function App() {
         paymentMap[pid] = record;
       });
 
-      let billingDisc = Object.entries(billingMap)
+      let missingPayments = Object.entries(billingMap)
         .filter(([pid, client]) => {
           // appear in billing but not in payment
           if (!paymentMap[pid]) return true;
@@ -42,7 +42,7 @@ function App() {
         })
         .map(([pid, client]) => client);
 
-      let paymentDisc = Object.entries(paymentMap)
+      let missingBillings = Object.entries(paymentMap)
         .filter(([pid, client]) => {
           // appear in payment but not in billing
           if (!billingMap[pid]) return true;
@@ -50,8 +50,8 @@ function App() {
         })
         .map(([pid, client]) => client);
 
-      setBillingDiscrepancies(billingDisc);
-      setPaymentDiscrepancies(paymentDisc);
+      setMissingPayments(missingPayments);
+      setMissingBillings(missingBillings);
 
       setBillingData(null);
       setPaymentData(null);
@@ -61,8 +61,8 @@ function App() {
     }
   };
 
-  const displayBillingDiscrepancies = () => {
-    return billingDiscrepancies.map((client, index) => {
+  const displayMissingPayments = () => {
+    return missingPayments.map((client, index) => {
       return (
         <div className='results-row' key={index}>
           <p>{client.consumer_name}</p>
@@ -75,8 +75,8 @@ function App() {
     });
   };
 
-  const displayPaymentDiscrepancies = () => {
-    return paymentDiscrepancies.map((client, index) => {
+  const displayMissingBillings = () => {
+    return missingBillings.map((client, index) => {
       let supportCoordinator = client['Support Coordinator'] || 'Unknown';
 
       return (
@@ -148,15 +148,15 @@ function App() {
             <div>View / Export Discrepancies</div>
           </div>
           <div className='results-container-content'>
-            {billingDiscrepancies && paymentDiscrepancies && (
+            {missingPayments && missingBillings && (
               <>
                 <div className='results-section'>
                   <div className='results-section-header'>
-                    <p className='discrepancy-type'>Billing Discrepancies</p>
+                    <p className='discrepancy-type'>Missing Payments</p>
                     <p className='discrepancy-type-description'>Billed for but no payment received</p>
                   </div>
                   <div className='results'>
-                    {billingDiscrepancies.length > 1 ? (
+                    {missingPayments.length > 1 ? (
                       <>
                         <div className='results-header'>
                           <p>Client Name</p>
@@ -165,7 +165,7 @@ function App() {
                           <p>Service End</p>
                           <p>Support Coordinator</p>
                         </div>
-                        <div className='results-row-container'>{displayBillingDiscrepancies()}</div>
+                        <div className='results-row-container'>{displayMissingPayments()}</div>
                       </>
                     ) : (
                       <div className='no-discrepancies-container'>
@@ -180,11 +180,11 @@ function App() {
 
                 <div className='results-section'>
                   <div className='results-section-header'>
-                    <p className='discrepancy-type'>Payment Discrepancies</p>
+                    <p className='discrepancy-type'>Missing Billings</p>
                     <p className='discrepancy-type-description'>Payment received but not billed for</p>
                   </div>
                   <div className='results'>
-                    {paymentDiscrepancies.length > 1 ? (
+                    {missingBillings.length > 1 ? (
                       <>
                         <div className='results-header'>
                           <p>Client Name</p>
@@ -193,7 +193,7 @@ function App() {
                           <p>Service End</p>
                           <p>Support Coordinator</p>
                         </div>
-                        <div className='results-row-container'>{displayPaymentDiscrepancies()}</div>
+                        <div className='results-row-container'>{displayMissingBillings()}</div>
                       </>
                     ) : (
                       <div className='no-discrepancies-container'>
