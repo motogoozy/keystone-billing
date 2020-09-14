@@ -10,14 +10,6 @@ function App() {
   const [billingDiscrepancies, setBillingDiscrepancies] = useState(null);
   const [paymentDiscrepancies, setPaymentDiscrepancies] = useState(null);
 
-  React.useEffect(() => {
-    console.log(billingDiscrepancies);
-  }, [billingDiscrepancies]);
-
-  React.useEffect(() => {
-    console.log(paymentDiscrepancies);
-  }, [paymentDiscrepancies]);
-
   const getDiscrepancies = () => {
     try {
       if (billingData.length === 0 || paymentData.length === 0) {
