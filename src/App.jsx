@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import './App.scss';
-
 import CSVReader from 'react-csv-reader';
-import { CSVLink } from 'react-csv';
 
 function App() {
   const [billingData, setBillingData] = useState(null);
@@ -19,35 +17,31 @@ function App() {
       let billingMap = {};
       let paymentMap = {};
 
-      billingData.forEach(record => {
-        let pid = record['consumer_pid'];
-        if (pid.length > 8) {
-          pid = pid.substring(pid.length - 8);
-        }
-        billingMap[pid] = record;
-      });
-      paymentData.forEach(record => {
-        let pid = record['PID'];
-        if (pid.length > 8) {
-          pid = pid.substring(pid.length - 8);
-        }
-        paymentMap[pid] = record;
-      });
+      billingData
+        .filter(record => record['consumer_pid'])
+        .forEach(record => {
+          let pid = record['consumer_pid'];
+          if (pid.length > 8) {
+            pid = pid.substring(pid.length - 8);
+          }
+          billingMap[pid] = record;
+        });
+      paymentData
+        .filter(record => record['PID'])
+        .forEach(record => {
+          let pid = record['PID'];
+          if (pid.length > 8) {
+            pid = pid.substring(pid.length - 8);
+          }
+          paymentMap[pid] = record;
+        });
 
       let missingPayments = Object.entries(billingMap)
-        .filter(([pid, client]) => {
-          // appear in billing but not in payment
-          if (!paymentMap[pid]) return true;
-          return false;
-        })
+        .filter(([pid, client]) => !paymentMap[pid]) // appears in billing but not in payment
         .map(([pid, client]) => client);
 
       let missingBillings = Object.entries(paymentMap)
-        .filter(([pid, client]) => {
-          // appear in payment but not in billing
-          if (!billingMap[pid]) return true;
-          return false;
-        })
+        .filter(([pid, client]) => !billingMap[pid]) // appears in payment but not in billing
         .map(([pid, client]) => client);
 
       setMissingPayments(missingPayments);
@@ -77,15 +71,12 @@ function App() {
 
   const displayMissingBillings = () => {
     return missingBillings.map((client, index) => {
-      let supportCoordinator = client['Support Coordinator'] || 'Unknown';
-
       return (
         <div className='results-row' key={index}>
           <p>{client['Consumer']}</p>
           <p>{client['PID']}</p>
           <p>{client['Start Date']}</p>
           <p>{client['End Date']}</p>
-          <p>{supportCoordinator}</p>
         </div>
       );
     });
@@ -156,7 +147,7 @@ function App() {
                     <p className='discrepancy-type-description'>Billed for but no payment received</p>
                   </div>
                   <div className='results'>
-                    {missingPayments.length > 1 ? (
+                    {missingPayments.length > 0 ? (
                       <>
                         <div className='results-header'>
                           <p>Client Name</p>
@@ -184,14 +175,13 @@ function App() {
                     <p className='discrepancy-type-description'>Payment received but not billed for</p>
                   </div>
                   <div className='results'>
-                    {missingBillings.length > 1 ? (
+                    {missingBillings.length > 0 ? (
                       <>
                         <div className='results-header'>
                           <p>Client Name</p>
                           <p>PID</p>
                           <p>Service Start</p>
                           <p>Service End</p>
-                          <p>Support Coordinator</p>
                         </div>
                         <div className='results-row-container'>{displayMissingBillings()}</div>
                       </>
