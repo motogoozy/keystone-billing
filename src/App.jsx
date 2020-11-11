@@ -8,30 +8,31 @@ function App() {
   const [missingPayments, setMissingPayments] = useState(null);
   const [missingBillings, setMissingBillings] = useState(null);
 
-  const getDiscrepancies = () => {
+  const getDiscrepancies = (billingRecords, paymentRecords) => {
     try {
-      if (billingData.length === 0 || paymentData.length === 0) {
+      if (billingRecords.length === 0 || paymentRecords.length === 0) {
         throw new Error('Could not get data from one or more files. Please check files and try again.');
       }
 
       let billingMap = {};
       let paymentMap = {};
 
-      billingData
+      billingRecords
         .filter(record => record['consumer_pid'])
         .forEach(record => {
-          let pid = record['consumer_pid'];
+          let pid = record['consumer_pid'].trim();
           if (pid.length > 8) {
-            pid = pid.substring(pid.length - 8);
+            pid = pid.slice(-8);
           }
           billingMap[pid] = record;
         });
-      paymentData
+
+      paymentRecords
         .filter(record => record['PID'])
         .forEach(record => {
-          let pid = record['PID'];
+          let pid = record['PID'].trim();
           if (pid.length > 8) {
-            pid = pid.substring(pid.length - 8);
+            pid = pid.slice(-8);
           }
           paymentMap[pid] = record;
         });
@@ -124,7 +125,7 @@ function App() {
             <div className='file-upload-content'>
               <button
                 className='check-button'
-                onClick={getDiscrepancies}
+                onClick={() => getDiscrepancies(billingData, paymentData)}
                 disabled={!billingData || !paymentData ? true : false}
               >
                 Check
